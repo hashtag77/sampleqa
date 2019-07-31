@@ -66,8 +66,9 @@
                 {{ $comment->comment }}
               </span>
             </div>
-            <div class="row" id="likes-dislikes" style="padding: 10px 25px;">
-              <a href="{{ url('/comments/like/'.$comment->id.'/'.$thread->thread_slug) }}"><i class="fa fa-lg fa-thumbs-up" title="Like comment"></i> @if(count($comment->likes) > 0)<span class="badge badge-danger" title="Total number of likes">{{ count($comment->likes) }}</span>@endif</a>
+            <div class="row" id="likes" style="padding: 10px 25px;">
+              <input type="hidden" id="comment-id" value="{{ $comment->id }}">
+              <a href="" id="likesClick"><i class="fa fa-lg fa-thumbs-up" title="Like comment"></i> @if(count($comment->likes) > 0)<span class="badge badge-danger likesCount" title="Total number of likes">{{ count($comment->likes) }}</span>@endif</a>
             </div>
           </div>
         @endforeach
@@ -94,4 +95,18 @@
 </div>
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+$("body").on('click', '#likesClick', function(e) {
+  var id = $("#comment-id").val();
+  $.ajax({
+    url: '/comments/like/' + id,
+    processData: false,
+    type: 'post',
+    success: function(result){
+      //
+    }
+  });
+  e.preventDefault();
+});
+</script>
 @endsection

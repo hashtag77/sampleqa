@@ -46,7 +46,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     /* Comments */
     Route::post('/comments/post', 'CommentsController@postComment');
-    Route::get('/comments/like/{comment_id}/{thread_slug}', 'CommentsController@likeComment');
+    Route::post('/comments/like/{comment_id}', 'CommentsController@likeComment');
     Route::get('/comments/helpful/{comment_id}/{thread_slug}', 'CommentsController@helpfulComment');
     Route::get('/comments/notHelpful/{comment_id}/{thread_slug}', 'CommentsController@notHelpfulComment');    
     Route::get('/comments/edit/{comment_id}/{thread_slug}', 'CommentsController@editComment');

@@ -26,7 +26,7 @@ class CommentsController extends Controller
         return $this->redirectTo($request->input('thread_slug'));
     }
 
-    public function likeComment($comment_id, $thread_slug)
+    public function likeComment($comment_id)
     {
         $likes = Like::where('comment_id', $comment_id)
                     ->where('user_id', Auth::user()->id)
@@ -48,7 +48,11 @@ class CommentsController extends Controller
             $like->save();
         }
 
-        return $this->redirectTo($thread_slug);
+        $likesCount = Comment::with('likes')->where('comments.id', $comment_id)->get();
+
+        return response()->json([
+            'likesCount' => $likesCount
+        ], 200);
     }
 
     public function helpfulComment($comment_id, $thread_slug)
