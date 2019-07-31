@@ -15,22 +15,130 @@ class DiscussionsController extends Controller
 {
     public function index()
     {
-        $threads = DB::table('discussions')
+        $threads = Discussion::with('comments')
+                            ->select('discussions.*', 'channels.channel', 'users.username')
+                            ->whereNull('discussions.deleted_at')
+                            ->join('channels', 'channels.id', 'discussions.channel_id')
+                            ->join('users', 'users.id', 'discussions.user_id')
+                            ->orderBy('discussions.updated_at', 'desc')
+                            ->paginate(5);
+
+        $channels = Channel::all();
+
+        return view('discussions.index')->with([
+            'threads'   => $threads,
+            'pageTitle' => 'All Threads',
+            'channels'  => $channels
+        ]);
+    }
+
+    public function myQuestions()
+    {
+        $threads = Discussion::with('comments')
+                        ->select('discussions.*', 'channels.channel', 'users.username')
+                        ->where('discussions.user_id', Auth::user()->id)
+                        ->join('channels', 'channels.id', 'discussions.channel_id')
+                        ->join('users', 'users.id', 'discussions.user_id')
+                        ->orderBy('discussions.updated_at', 'desc')
+                        ->paginate(5);
+
+        return view('discussions.index')->with([
+            'threads'   => $threads,
+            'pageTitle' => 'My Questions'
+        ]);
+    }
+
+    public function myParticipations()
+    {
+        $threads = Discussion::with('comments')
+                        ->select('discussions.*', 'channels.channel', 'users.username')
+                        ->whereNull('discussions.deleted_at')
+                        ->where('comments.user_id', Auth::user()->id)
+                        ->orWhere('discussions.user_id', Auth::user()->id)
+                        ->join('channels', 'channels.id', 'discussions.channel_id')
+                        ->join('users', 'users.id', 'discussions.user_id')
+                        ->leftJoin('comments', 'comments.discussion_id', 'discussions.id')
+                        ->orderBy('discussions.updated_at', 'desc')
+                        ->paginate(5);  
+        
+        return view('discussions.index')->with([
+            'threads'   => $threads,
+            'pageTitle' => 'My Participations'
+        ]);
+    }
+
+    public function solved()
+    {
+        $threads = Discussion::with('comments')
+                        ->select('discussions.*', 'channels.channel', 'users.username')
+                        ->where('discussions.status', 'SOLVED')
+                        ->join('channels', 'channels.id', 'discussions.channel_id')
+                        ->join('users', 'users.id', 'discussions.user_id')
+                        ->orderBy('discussions.updated_at', 'desc')
+                        ->paginate(5);
+
+        return view('discussions.index')->with([
+            'threads'   => $threads,
+            'pageTitle' => 'Solved'
+        ]);
+    }
+
+    public function unsolved()
+    {
+        $threads = Discussion::with('comments')
+                        ->select('discussions.*', 'channels.channel', 'users.username')
+                        ->where('discussions.status', 'UNSOLVED')
+                        ->join('channels', 'channels.id', 'discussions.channel_id')
+                        ->join('users', 'users.id', 'discussions.user_id')
+                        ->orderBy('discussions.updated_at', 'desc')
+                        ->paginate(5);
+
+        return view('discussions.index')->with([
+            'threads'   => $threads,
+            'pageTitle' => 'Unsolved'
+        ]);
+    }
+
+    public function noreplies()
+    {
+        $threads = Discussion::with('comments')
                         ->select('discussions.*', 'channels.channel', 'users.username')
                         ->whereNull('discussions.deleted_at')
                         ->join('channels', 'channels.id', 'discussions.channel_id')
                         ->join('users', 'users.id', 'discussions.user_id')
-                        ->orderBy('id', 'desc')
+                        ->orderBy('discussions.updated_at', 'desc')
+                        ->get();
+
+        return view('discussions.noReplies')->with([
+            'threads'   => $threads,
+            'pageTitle' => 'No Replies Yet'
+        ]);
+    }
+
+    public function channel($channel_id, $channel)
+    {
+        $threads = Discussion::with('comments')
+                        ->select('discussions.*', 'channels.channel', 'users.username')
+                        ->whereNull('discussions.deleted_at')
+                        ->where('discussions.channel_id', $channel_id)
+                        ->join('channels', 'channels.id', 'discussions.channel_id')
+                        ->join('users', 'users.id', 'discussions.user_id')
+                        ->orderBy('discussions.updated_at', 'desc')
                         ->paginate(5);
 
-        return view('discussions.index', compact('threads'));
+        return view('discussions.index')->with([
+            'threads'   => $threads,
+            'pageTitle' => 'Channel: '.$channel
+        ]);
     }
 
     public function createThread()
     {
         $channels = Channel::whereNull('deleted_at')->get();
 
-        return view('discussions.createThread', compact('channels'));
+        return view('discussions.createThread')->with([
+            'channels'  => $channels
+        ]);
     }
 
     public function storeThread(Request $request)
@@ -43,7 +151,9 @@ class DiscussionsController extends Controller
             'channel_id'    => $request->input('channel'),
         ]);
 
-        return redirect('/discussions')->with('success', 'Thread has been created successfully!');
+        return redirect('/discussions')->with(
+            'success', 'Thread has been created successfully!'
+        );
     }
 
     public function showThread($thread_slug)
@@ -54,11 +164,11 @@ class DiscussionsController extends Controller
         $channel = Channel::find($thread->channel_id);
         $user = User::find($thread->user_id);
 
-        $comments = DB::table('comments')
-                        ->select('comments.*', 'users.username', 'likes.likes')
+        $comments = Comment::with('likes')
+                        ->select('comments.*', 'users.username')
                         ->where('discussion_id', $thread->id)
                         ->join('users', 'users.id', 'comments.user_id')
-                        ->leftJoin('likes', 'likes.comment_id', 'comments.id')
+                        ->distinct()
                         ->paginate(10);
 
         return view('discussions.showThread')->with([
@@ -104,44 +214,5 @@ class DiscussionsController extends Controller
         $thread->delete();
 
         return redirect('/discussions');
-    }
-
-    public function myQuestions()
-    {
-        $threads = DB::table('discussions')
-                        ->select('discussions.*', 'channels.channel', 'users.username')
-                        ->where('discussions.user_id', Auth::user()->id)
-                        ->join('channels', 'channels.id', 'discussions.channel_id')
-                        ->join('users', 'users.id', 'discussions.user_id')
-                        ->orderBy('id', 'desc')
-                        ->paginate(5);
-
-        return view('discussions.index', compact('threads'));
-    }
-
-    public function solved()
-    {
-        $threads = DB::table('discussions')
-                        ->select('discussions.*', 'channels.channel', 'users.username')
-                        ->where('discussions.status', 'SOLVED')
-                        ->join('channels', 'channels.id', 'discussions.channel_id')
-                        ->join('users', 'users.id', 'discussions.user_id')
-                        ->orderBy('id', 'desc')
-                        ->paginate(5);
-
-        return view('discussions.index', compact('threads'));
-    }
-
-    public function unsolved()
-    {
-        $threads = DB::table('discussions')
-                        ->select('discussions.*', 'channels.channel', 'users.username')
-                        ->where('discussions.status', 'UNSOLVED')
-                        ->join('channels', 'channels.id', 'discussions.channel_id')
-                        ->join('users', 'users.id', 'discussions.user_id')
-                        ->orderBy('id', 'desc')
-                        ->paginate(5);
-
-        return view('discussions.index', compact('threads'));
     }
 }

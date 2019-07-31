@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentsController extends Controller
 {
+    public function redirectTo($param)
+    {
+        return redirect('/discussions/view/'.$param);
+    }
+
     public function postComment(Request $request)
     {
         $comment = new Comment();
@@ -18,20 +23,23 @@ class CommentsController extends Controller
         $comment->comment = $request->input('comment');
         $comment->save();
 
-        return redirect('/discussions/view/'.$request->input('thread_slug'));
+        return $this->redirectTo($request->input('thread_slug'));
     }
 
     public function likeComment($comment_id, $thread_slug)
     {
-        $likes = Like::where('comment_id', $comment_id)->where('user_id', Auth::user()->id)->first();
+        $likes = Like::where('comment_id', $comment_id)
+                    ->where('user_id', Auth::user()->id)
+                    ->whereNull('deleted_at')
+                    ->first();
 
         if($likes) {
             if($likes->likes == 0) {
                 $likes->likes = $likes->likes + 1;
+                $likes->save();
             } elseif($likes->likes == 1) {
-                $likes->likes = $likes->likes - 1;
+                $likes->delete();
             }
-            $likes->save();
         } else {
             $like               = new Like();
             $like->comment_id   = $comment_id;
@@ -40,7 +48,7 @@ class CommentsController extends Controller
             $like->save();
         }
 
-        return redirect('/discussions/view/'.$thread_slug);
+        return $this->redirectTo($thread_slug);
     }
 
     public function helpfulComment($comment_id, $thread_slug)
@@ -53,6 +61,46 @@ class CommentsController extends Controller
         $thread->status = "SOLVED";
         $thread->save();
 
-        return redirect('/discussions/view/'.$thread_slug);
+        return $this->redirectTo($thread_slug); 
+    }
+
+    public function notHelpfulComment($comment_id, $thread_slug)
+    {
+        $comment = Comment::find($comment_id);
+        $comment->helpful = 0;
+        $comment->save();
+
+        $thread = Discussion::where('id', $comment->discussion_id)->first();
+        $thread->status = "UNSOLVED";
+        $thread->save();
+
+        return $this->redirectTo($thread_slug);
+    }
+
+    public function editComment($comment_id, $thread_slug)
+    {
+        $comment = Comment::find($comment_id);
+
+        return view('comments.edit')->with([
+            'thread_slug'   => $thread_slug,
+            'comment'       => $comment
+        ]);
+    }
+
+    public function updateComment(Request $request)
+    {
+        $comment = Comment::find($request->input('comment_id'));
+        $comment->comment = $request->input('comment');
+        $comment->save();
+
+        return $this->redirectTo($request->input('thread_slug'));
+    }
+
+    public function deleteComment($comment_id, $thread_slug)
+    {
+        $comment = Comment::find($comment_id);
+        $comment->delete();
+
+        return $this->redirectTo($thread_slug);
     }
 }

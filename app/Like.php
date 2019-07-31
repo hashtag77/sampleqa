@@ -12,4 +12,9 @@ class Like extends Model
     protected $fillable = ['comment_id', 'user_id', 'likes'];
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+
+    public function comment()
+    {
+        return $this->belongsTo(Comment::class);
+    }
 }

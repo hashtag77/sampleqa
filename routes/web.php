@@ -24,6 +24,8 @@ Route::get('/discussions', 'DiscussionsController@index');
 Route::get('/discussions/view/{thread_slug}', 'DiscussionsController@showThread');
 Route::get('/discussions/solved', 'DiscussionsController@solved');
 Route::get('/discussions/unsolved', 'DiscussionsController@unsolved');
+Route::get('/discussions/noreplies', 'DiscussionsController@noreplies');
+Route::get('/discussions/channel/{channel_id}/{channel}', 'DiscussionsController@channel');
 
 /* Profile */
 Route::get('/profile/{username}', 'UsersController@profile');
@@ -36,6 +38,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/discussions/update', 'DiscussionsController@updateThread');
     Route::delete('/discussions/delete/{thread_slug}', 'DiscussionsController@deleteThread');
     Route::get('/discussions/questions', 'DiscussionsController@myQuestions');
+    Route::get('/discussions/participations', 'DiscussionsController@myParticipations');
 
     /* Channels */
     Route::get('/channels/create', 'ChannelsController@createChannel');
@@ -45,4 +48,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/comments/post', 'CommentsController@postComment');
     Route::get('/comments/like/{comment_id}/{thread_slug}', 'CommentsController@likeComment');
     Route::get('/comments/helpful/{comment_id}/{thread_slug}', 'CommentsController@helpfulComment');
+    Route::get('/comments/notHelpful/{comment_id}/{thread_slug}', 'CommentsController@notHelpfulComment');    
+    Route::get('/comments/edit/{comment_id}/{thread_slug}', 'CommentsController@editComment');
+    Route::post('/comments/update', 'CommentsController@updateComment');
+    Route::get('/comments/delete/{comment_id}/{thread_slug}', 'CommentsController@deleteComment');
 });

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.sidebar')
 
 @section('content')
 <form method="POST" action="{{ url('/discussions/update') }}">

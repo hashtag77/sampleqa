@@ -89,53 +89,53 @@
                   <li class="nav-item">
                     <a class="nav-link active" href="{{ url('/discussions/create') }}">
                       <span data-feather="home"></span>
-                      Create Thread <span class="sr-only"></span>
+                      <i class="fa fa-plus"></i> Create Thread <span class="sr-only"></span>
                     </a>
                   </li>
                   @endauth
                   <li class="nav-item">
                     <a class="nav-link active" href="{{ url('/discussions') }}">
                       <span data-feather="home"></span>
-                      All Threads <span class="sr-only">(current)</span>
+                      <i class="fa fa-th-list"></i> All Threads <span class="sr-only">(current)</span>
                     </a>
                   </li>
                   @auth
                   <li class="nav-item">
                     <a class="nav-link" href="{{ url('/discussions/questions') }}">
                       <span data-feather="layers"></span>
-                      My Questions
+                      <i class="fa fa-question"></i> My Questions
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{{ url('/discussions/participations') }}">
                       <span data-feather="layers"></span>
-                      My Participations
+                      <i class="fa fa-hand-paper-o"></i> Participations
                     </a>
                   </li>
                   @endauth
                   <li class="nav-item">
                     <a class="nav-link" href="/discussions/solved">
                       <span data-feather="file"></span>
-                      Solved
+                      <i class="fa fa-check"></i> Solved
                     </a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="/discussions/unsolved">
                       <span data-feather="shopping-cart"></span>
-                      Unsolved
+                      <i class="fa fa-times"></i> Unsolved
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="/discussions/noreplies">
                       <span data-feather="users"></span>
-                      No Replies Yet
+                      <i class="fa fa-minus"></i> No Replies Yet
                     </a>
                   </li>
                 </ul>
               </div>
             </nav>
 
-            <main class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            <main class="col-md-9 ml-sm-auto col-lg-10 px-4" style="padding-top: 10px">
                 @include('inc.messages')
                 @yield('content')
             </main>
