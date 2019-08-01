@@ -36,7 +36,7 @@
       </div>
       <hr>
       @if(count($comments))
-        <div class="container">
+        <div class="container" id="comments-data">
         @foreach($comments as $comment)
           <div style="{{ $comment->helpful == 1 ? "background-color: #e1eaea; border: 1px solid #666666; border-radius: 10px;" : "" }}">
             <div class="row" style="padding: 10px 10px; ">
@@ -67,8 +67,7 @@
               </span>
             </div>
             <div class="row" id="likes" style="padding: 10px 25px;">
-              <input type="hidden" id="comment-id" value="{{ $comment->id }}">
-              <a href="" id="likesClick"><i class="fa fa-lg fa-thumbs-up" title="Like comment"></i> @if(count($comment->likes) > 0)<span class="badge badge-danger likesCount" title="Total number of likes">{{ count($comment->likes) }}</span>@endif</a>
+              <a href="" id="likesClick"><i class="fa fa-lg fa-thumbs-up" title="Like comment"></i><input type="hidden" id="comment-id" value="{{ $comment->id }}"> @if(count($comment->likes) > 0)<span class="badge badge-danger" id="likesCount{{  $comment->id }}" title="Total number of likes">{{ count($comment->likes) }}</span>@endif</a>
             </div>
           </div>
         @endforeach
@@ -97,13 +96,13 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
 $("body").on('click', '#likesClick', function(e) {
-  var id = $("#comment-id").val();
+  var id = $(this).find('input#comment-id');
   $.ajax({
-    url: '/comments/like/' + id,
+    url: '/comments/like/' + id[0].defaultValue,
     processData: false,
     type: 'post',
     success: function(result){
-      //
+      $('span#likesCount' + id[0].defaultValue).html('').append(result.likesCount[0].likes.length);
     }
   });
   e.preventDefault();
