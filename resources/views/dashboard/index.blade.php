@@ -5,9 +5,32 @@
     <div class="jumbotron">
         <div class="row">
             <div class="col-md-6">
-                <h2>{{ $user->name }}</h2>
+                <h2 style="display:inline-block; margin-right: 10px"><strong>{{ $user->name }}</strong></h2>
+                @if(isset($userProfile))
+                <span style="display:inline-block;">
+                    @if($userProfile->website != '')
+                        <a href="{{ 'https://'.$userProfile->website }}" style="margin-left:10px"><i class="fa fa-globe fa-lg"></i></a>
+                    @endif
+                    @if($userProfile->github != '')
+                        <a href="{{ 'https://github.com/'.$userProfile->github }}" style="margin-left:10px"><i class="fa fa-github fa-lg"></i></a>
+                    @endif
+                    @if($userProfile->twitter != '')
+                        <a href="{{ 'https://twitter.com/'.$userProfile->twitter }}" style="margin-left:10px"><i class="fa fa-twitter fa-lg"></i></a>
+                    @endif
+                </span>
+                @endif
                 <h4>{{ $user->username }}</h4>
-                <p>Member since {{ \Carbon\Carbon::parse($user->created_at)->diffforhumans() }}</p>
+                @if(isset($userProfile) && isset($userProfile->company) && $userProfile->company != '' && isset($userProfile->job_title) && $userProfile->job_title != '')
+                    <h5>{{ $userProfile->job_title.' at '.$userProfile->company }}</h5>
+                @else
+                    {!! (isset($userProfile->job_title) && $userProfile->job_title != '') ? '<h5>'.$userProfile->job_title.'</h5>' : ((isset($userProfile->company) && $userProfile->company != '') ? '<h5>Works at <strong>'.$userProfile->company.'</strong></h5>' : '') !!}
+                @endif
+                @if(isset($userProfile) && isset($userProfile->hometown) && $userProfile->hometown != '' && isset($userCountry) && $userCountry->name != '')
+                    <h5>Lives in {{ $userProfile->hometown.', '.$userCountry->name.' ('.$userCountry->abbr.')' }}</h5>
+                @else
+                    {!! (isset($userProfile) && isset($userProfile->hometown) && $userProfile->hometown != '') ? '<h5>Lives in <strong>'.$userProfile->hometown.'</strong></h5>' : ((isset($userProfile) && isset($userCountry) && $userCountry->name != '') ? '<h5> Lives in <strong>'.$userCountry->name.' ('.$userCountry->abbr.')</strong></h5>' : '') !!}
+                @endif
+                <small>Member since {{ \Carbon\Carbon::parse($user->created_at)->diffforhumans() }}</small>
             </div>
             <div class="col-md-6" style="justify-content: right">
                 <div class="row">
@@ -27,36 +50,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <div class="card bg-success">
-                <div class="card-body text-light">
-                    <small><strong>Total Views</strong></small>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card bg-warning">
-                <div class="card-body">
-                    <small><strong>Total Views</strong></small>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card bg-secondary">
-                <div class="card-body text-light">
-                    <small><strong>Total Views</strong></small>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card bg-dark">
-                <div class="card-body text-light">
-                    <small><strong>Total Views</strong></small>
                 </div>
             </div>
         </div>

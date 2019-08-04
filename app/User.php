@@ -81,4 +81,9 @@ class User extends Authenticatable
     {
         return ($user_id == Auth::user()->id) ? true : false;
     }
+
+    public function userProfile()
+    {
+        return $this->hasOne(UserProfile::class);
+    }
 }

@@ -52,4 +52,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/comments/edit/{comment_id}/{thread_slug}', 'CommentsController@editComment');
     Route::post('/comments/update', 'CommentsController@updateComment');
     Route::get('/comments/delete/{comment_id}/{thread_slug}', 'CommentsController@deleteComment');
+    
+    /* Profile */
+    Route::get('/profile/{username}/edit', 'UsersController@editProfile');
+    Route::post('/profile/update', 'UsersController@updateProfile');
+
+    /* Countries */
+    Route::get('/countries/create', 'CountriesController@create');
+    Route::post('/countries/create', 'CountriesController@store');
 });

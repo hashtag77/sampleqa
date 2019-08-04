@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DB;
 use Auth;
 use App\User;
+use App\Country;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -43,10 +44,18 @@ class DashboardController extends Controller
                             ->join('discussions', 'discussions.id', 'comments.discussion_id')
                             ->get();
 
+        $userProfile = $user->userProfile;
+        $userCountry = '';
+        if(isset($userProfile)) {
+            $userCountry = Country::find($userProfile->country_id);
+        }
+
         return view('dashboard.index')->with([
             'user'          => $user,
             'discussions'   => $threads,
-            'bestReply'     => count($bestReply)
+            'bestReply'     => count($bestReply),
+            'userProfile'   => $userProfile,
+            'userCountry'   => $userCountry
         ]);
     }
 }
