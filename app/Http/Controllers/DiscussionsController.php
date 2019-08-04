@@ -151,6 +151,10 @@ class DiscussionsController extends Controller
             'channel_id'    => $request->input('channel'),
         ]);
 
+        $user = User::find(Auth::user()->id);
+        $user->experience = $user->experience + 100;
+        $user->save();
+
         return redirect('/discussions')->with(
             'success', 'Thread has been created successfully!'
         );
@@ -211,6 +215,11 @@ class DiscussionsController extends Controller
     public function deleteThread($thread_slug)
     {
         $thread = Discussion::find($request->input('discussion_id'));
+        
+        $user = User::find(Auth::user()->id);
+        $user->experience = $user->experience - 100;
+        $user->save();
+
         $thread->delete();
 
         return redirect('/discussions');

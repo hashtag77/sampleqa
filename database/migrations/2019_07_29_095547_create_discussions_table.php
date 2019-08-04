@@ -15,10 +15,11 @@ class CreateDiscussionsTable extends Migration
     {
         Schema::create('discussions', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('thread_slug');
             $table->integer('user_id')->unsigned();
             $table->string('title');
             $table->longText('query');
-            $table->integer('channel_id');
+            $table->integer('channel_id')->unsigned();
             $table->enum('status', ['SOLVED', 'UNSOLVED'])->default('UNSOLVED');
             $table->bigInteger('views')->default(0);
             $table->softDeletes();

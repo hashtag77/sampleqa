@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Like;
 use App\Comment;
 use App\Discussion;
@@ -23,6 +24,12 @@ class CommentsController extends Controller
         $comment->comment = $request->input('comment');
         $comment->save();
 
+        if(Auth::user()->id != $comment->user_id) {
+            $user = User::find($comment->user_id);
+            $user->experience = $user->experience + 10;
+            $user->save();
+        }
+
         return $this->redirectTo($request->input('thread_slug'));
     }
 
@@ -34,18 +41,27 @@ class CommentsController extends Controller
                     ->first();
 
         if($likes) {
-            if($likes->likes == 0) {
-                $likes->likes = $likes->likes + 1;
-                $likes->save();
-            } elseif($likes->likes == 1) {
-                $likes->delete();
+            $comment = Comment::find($comment_id);
+            if(Auth::user()->id != $comment->user_id) {
+                $user = User::find($comment->user_id);
+                $user->experience = $user->experience - 35;
+                $user->save();
             }
+
+            $likes->delete();
         } else {
             $like               = new Like();
             $like->comment_id   = $comment_id;
             $like->user_id      = Auth::user()->id;
             $like->likes        = 1;
             $like->save();
+
+            $comment = Comment::find($comment_id);
+            if(Auth::user()->id != $comment->user_id) {
+                $user = User::find($comment->user_id);
+                $user->experience = $user->experience + 35;
+                $user->save();
+            }
         }
 
         $likesCount = Comment::with('likes')->where('comments.id', $comment_id)->get();
@@ -61,6 +77,12 @@ class CommentsController extends Controller
         $comment->helpful = 1;
         $comment->save();
 
+        if(Auth::user()->id != $comment->user_id) {
+            $user = User::find($comment->user_id);
+            $user->experience = $user->experience + 1000;
+            $user->save();
+        }
+
         $thread = Discussion::find($comment->discussion_id);
         $thread->status = "SOLVED";
         $thread->save();
@@ -73,6 +95,12 @@ class CommentsController extends Controller
         $comment = Comment::find($comment_id);
         $comment->helpful = 0;
         $comment->save();
+
+        if(Auth::user()->id != $comment->user_id) {
+            $user = User::find($comment->user_id);
+            $user->experience = $user->experience - 1000;
+            $user->save();
+        }
 
         $thread = Discussion::where('id', $comment->discussion_id)->first();
         $thread->status = "UNSOLVED";
@@ -103,6 +131,13 @@ class CommentsController extends Controller
     public function deleteComment($comment_id, $thread_slug)
     {
         $comment = Comment::find($comment_id);
+        
+        if(Auth::user()->id != $comment->user_id) {
+            $user = User::find($comment->user_id);
+            $user->experience = $user->experience - 10;
+            $user->save();
+        }
+
         $comment->delete();
 
         return $this->redirectTo($thread_slug);

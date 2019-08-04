@@ -16,6 +16,8 @@ class CreateChannelsTable extends Migration
         Schema::create('channels', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('channel');
+            $table->integer('creator')->unsigned();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

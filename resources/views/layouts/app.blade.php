@@ -90,5 +90,12 @@
             @yield('content')
         </main>
     </div>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="{{ asset('js/popover.min.js') }}"></script>
+    <script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+    </script>
 </body>
 </html>
