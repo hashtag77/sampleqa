@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDiscussionsTable extends Migration
+class CreateRoleUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,10 @@ class CreateDiscussionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('discussions', function (Blueprint $table) {
+        Schema::create('role_user', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('role_id')->unsigned();
             $table->integer('user_id')->unsigned();
-            $table->string('title');
-            $table->longText('query');
-            $table->integer('channel_id');
-            $table->enum('status', ['SOLVED', 'UNSOLVED'])->default('UNSOLVED');
-            $table->bigInteger('views')->default(0);
-            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -33,6 +28,6 @@ class CreateDiscussionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('discussions');
+        Schema::dropIfExists('role_user');
     }
 }

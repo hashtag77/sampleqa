@@ -28,7 +28,7 @@ Route::get('/discussions/noreplies', 'DiscussionsController@noreplies');
 Route::get('/discussions/channel/{channel_id}/{channel}', 'DiscussionsController@channel');
 
 /* Profile */
-Route::get('/profile/{username}', 'UsersController@profile');
+Route::get('/profile/{username}', 'DashboardController@index');
 
 Route::group(['middleware' => ['auth']], function () {
     /* Discussions */
@@ -37,7 +37,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/discussions/edit/{thread_slug}', 'DiscussionsController@editThread');
     Route::post('/discussions/update', 'DiscussionsController@updateThread');
     Route::delete('/discussions/delete/{thread_slug}', 'DiscussionsController@deleteThread');
-    Route::get('/discussions/questions', 'DiscussionsController@myQuestions');
+    Route::get('/discussions/threads', 'DiscussionsController@myThreads');
     Route::get('/discussions/participations', 'DiscussionsController@myParticipations');
 
     /* Channels */

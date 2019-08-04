@@ -32,7 +32,7 @@ class DiscussionsController extends Controller
         ]);
     }
 
-    public function myQuestions()
+    public function myThreads()
     {
         $threads = Discussion::with('comments')
                         ->select('discussions.*', 'channels.channel', 'users.username')
@@ -44,7 +44,7 @@ class DiscussionsController extends Controller
 
         return view('discussions.index')->with([
             'threads'   => $threads,
-            'pageTitle' => 'My Questions'
+            'pageTitle' => 'My Threads'
         ]);
     }
 
@@ -168,7 +168,7 @@ class DiscussionsController extends Controller
                         ->select('comments.*', 'users.username')
                         ->where('discussion_id', $thread->id)
                         ->join('users', 'users.id', 'comments.user_id')
-                        ->distinct()
+                        ->orderBy('id', 'asc')
                         ->paginate(10);
 
         return view('discussions.showThread')->with([

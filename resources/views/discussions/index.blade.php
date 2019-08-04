@@ -23,7 +23,7 @@
         </div>
         <div class="row">
           <div class="col-sm-4">
-            <small><a href="{{ url('/profile/'.$thread->username) }}" class="text-danger"><strong>{{ $thread->username }}</strong></a> | {{ $thread->created_at }} </small>
+            <small><a href="{{ url('/profile/'.$thread->username) }}" class="text-danger"><strong>{{ $thread->username }}</strong></a> | {{ \Carbon\Carbon::parse($thread->updated_at)->diffforhumans() }} </small>
             @if($thread->status == "SOLVED")
               <span class="badge" style="border-radius: 1.24rem; background-color: #b3ff66; color: #000; font-size: 11px; padding: 4px 6px;">SOLVED</span>
             @endif

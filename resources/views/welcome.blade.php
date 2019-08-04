@@ -75,7 +75,7 @@
                 <div class="top-right links">
                     <a href="{{ url('/discussions') }}">Discussions</a>
                     @auth
-                        <a href="{{ url('/dashboard') }}">Dashboard</a>
+                        <a href="{{ url('/profile/'.Auth::user()->username) }}">Dashboard</a>
                     @else
                         <a href="{{ route('login') }}">Login</a>
 

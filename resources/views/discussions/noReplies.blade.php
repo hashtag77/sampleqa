@@ -24,7 +24,7 @@
           </div>
           <div class="row">
             <div class="col-sm-4">
-              <small><a href="{{ url('/profile/'.$thread->username) }}" class="text-danger"><strong>{{ $thread->username }}</strong></a> | {{ $thread->created_at }} </small>
+              <small><a href="{{ url('/profile/'.$thread->username) }}" class="text-danger"><strong>{{ $thread->username }}</strong></a> | {{ \Carbon\Carbon::parse($thread->updated_at)->diffforhumans() }} </small>
             </div>
           </div>
         </div>
