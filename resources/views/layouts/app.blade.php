@@ -13,7 +13,7 @@
     <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Font Awesome -->
-    <script src="https://use.fontawesome.com/d9f51cd5b4.js"></script>
+    <script src="{{ asset('js/fontawesome.js') }}"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -90,7 +90,7 @@
             @yield('content')
         </main>
     </div>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
     <script src="{{ asset('js/popover.min.js') }}"></script>
     <script>
     $(function () {

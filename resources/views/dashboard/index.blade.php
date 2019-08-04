@@ -39,9 +39,6 @@
                             <div class="card-body text-light text-center">
                                 <h1>{{ $user->experience }}</h1>
                                 <small class="text-dark"><strong>Experience</strong></small>
-                                <span data-toggle="tooltip" data-placement="top" title="Tooltip on top">
-                                    <i class="fa fa-info"></i>  
-                                </span>
                             </div>
                         </div>
                     </div>
