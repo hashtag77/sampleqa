@@ -37,7 +37,7 @@
                     <div class="col-md-3">
                         <div class="card bg-info">
                             <div class="card-body text-light text-center">
-                                <h1>{{ $user->experience }}</h1>
+                                <h3>{{ $user->experience }}</h3>
                                 <small class="text-dark"><strong>Experience</strong></small>
                             </div>
                         </div>
@@ -45,7 +45,7 @@
                     <div class="col-md-3">
                         <div class="card bg-info">
                             <div class="card-body text-light text-center">
-                                <h1>{{ $bestReply }}</h1>
+                                <h3>{{ $bestReply }}</h3>
                                 <small class="text-dark"><strong>Best Reply</strong></small>
                             </div>
                         </div>
