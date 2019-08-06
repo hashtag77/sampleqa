@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\ToDo;
+use App\Section;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,9 +13,11 @@ class ToDosController extends Controller
     public function create()
     {
         $todos = ToDo::orderBy('created_at', 'desc')->get();
+        $sections = Section::orderBy('name', 'asc')->get();
 
         return view('todos.create')->with([
-            'todos' => $todos
+            'todos'     => $todos,
+            'sections'  => $sections
         ]);
     }
 
@@ -23,7 +26,7 @@ class ToDosController extends Controller
         Todo::create([
             'user_id'   => Auth::user()->id,
             'title'     => Str::title($request->input('title')),
-            'section'   => Str::title($request->input('section')),
+            'section_id'=> Str::title($request->input('section')),
             'status'    => $request->input('status')
         ]);
 

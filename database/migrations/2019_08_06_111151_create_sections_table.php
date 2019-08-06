@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateToDosTable extends Migration
+class CreateSectionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateToDosTable extends Migration
      */
     public function up()
     {
-        Schema::create('to_dos', function (Blueprint $table) {
+        Schema::create('sections', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('user_id')->unsigned();
-            $table->string('title');
-            $table->integer('section_id')->unsigned();
-            $table->enum('status', ['DONE', 'PENDING'])->default('PENDING');
+            $table->string('name');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -31,6 +29,6 @@ class CreateToDosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('to_dos');
+        Schema::dropIfExists('sections');
     }
 }
