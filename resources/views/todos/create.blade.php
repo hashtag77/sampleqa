@@ -15,7 +15,12 @@
               <input type="text" name="title" class="form-control" placeholder="What is it?" required>
               <br>
               <label for="section">Section</label>
-              <input type="text" name="section" class="form-control" placeholder="Under which section?" required>
+              <select name="section" class="form-control">
+                <option value="">Select Section</option>
+                @foreach($sections as $section)
+                  <option value="{{ $section->id }}">{{ $section->name }}</option>
+                @endforeach
+              </select>
               <br>
               <label for="status">Select Status</label>
               <select name="status" class="form-control">
@@ -43,6 +48,7 @@
             <th>Title</th>
             <th>Section</th>
             <th>Status</th>
+            <th>Created</th>
             <th>Action</th>
           </thead>
           <tbody>
@@ -54,6 +60,7 @@
                 <td>{{ $todo->title }}</td>
                 <td>{{ $todo->section }}</td>
                 <td><span class="badge {{ ($todo->status == "DONE") ? 'badge-success' : 'badge-warning' }}" style="padding: 5px 10px;">{{ $todo->status }}</span></td>
+                <td>{{ \Carbon\Carbon::parse($todo->created_at)->diffforhumans() }}</td>
                 <td>
                   @if($todo->status == 'PENDING')
                     <a href="{{ url('/todos/update/'.$todo->id) }}" class="btn btn-dark" title="Mark as DONE"><i class="fa fa-check text-light"></i></a>

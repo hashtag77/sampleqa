@@ -70,6 +70,9 @@
                                     <a class="dropdown-item" href="{{ url('/todos/create') }}">
                                         Add TODO
                                     </a>
+                                    <a class="dropdown-item" href="{{ url('/sections/create') }}">
+                                        Add Section
+                                    </a>
                                      @endif
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
