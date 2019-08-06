@@ -60,4 +60,9 @@ Route::group(['middleware' => ['auth']], function () {
     /* Countries */
     Route::get('/countries/create', 'CountriesController@create');
     Route::post('/countries/create', 'CountriesController@store');
+
+    /* TODOs*/
+    Route::get('/todos/create', 'ToDosController@create');
+    Route::post('/todos/store', 'ToDosController@store');
+    Route::get('/todos/update/{todo_id}', 'ToDosController@update');
 });
