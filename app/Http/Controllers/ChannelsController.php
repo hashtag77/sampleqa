@@ -11,7 +11,11 @@ class ChannelsController extends Controller
 {
     public function createChannel()
     {
-        return view('channels.createChannel');
+        $channels = Channel::orderBy('channel', 'asc')->get();
+
+        return view('channels.createChannel')->with([
+            'channels'  => $channels
+        ]);
     }
 
     public function storeChannel(Request $request)

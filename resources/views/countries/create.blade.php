@@ -35,8 +35,10 @@
     </div>
     <div class="card-body">
       @foreach($countries as $country)
-        <div class="col-md-2" style="float: left">
-          <p class="text-center">{{ $country->name.' ('.$country->abbr.')' }}</p>
+        <div class="col-md-3" style="float: left">
+          <ul>
+            <li class="text-center">{{ $country->name.' ('.$country->abbr.')' }}</li>
+          </ul>
         </div>
       @endforeach
     </div>

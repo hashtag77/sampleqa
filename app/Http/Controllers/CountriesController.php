@@ -11,7 +11,7 @@ class CountriesController extends Controller
 {
     public function create()
     {
-        $countries = Country::all();
+        $countries = Country::orderBy('name', 'asc')->get();
 
         return view('countries.create')->with([
             'countries' => $countries
