@@ -8,6 +8,7 @@ use App\Comment;
 use Carbon\Carbon;
 use App\Discussion;
 use Illuminate\Http\Request;
+use Helper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -155,6 +156,14 @@ class DiscussionsController extends Controller
         $user->experience = $user->experience + 100;
         $user->save();
 
+        Helper::recordActivity(
+            Auth::user()->id,
+            Auth::user()->username,
+            'started a new conversation',
+            $request->input('title'),
+            '/discussions/view/'.$threadSlug
+        );
+
         return redirect('/discussions')->with(
             'success', 'Thread has been created successfully!'
         );
@@ -162,25 +171,31 @@ class DiscussionsController extends Controller
 
     public function showThread($thread_slug)
     {
-        $thread = Discussion::where('thread_slug', $thread_slug)->first();
-        $thread->views = $thread->views + 1;
-        $thread->save();
-        $channel = Channel::find($thread->channel_id);
-        $user = User::find($thread->user_id);
+        $thread = Discussion::where('thread_slug', $thread_slug)->whereNull('deleted_at')->first();
 
-        $comments = Comment::with('likes')
-                        ->select('comments.*', 'users.username')
-                        ->where('discussion_id', $thread->id)
-                        ->join('users', 'users.id', 'comments.user_id')
-                        ->orderBy('id', 'asc')
-                        ->paginate(10);
+        if($thread) {
 
-        return view('discussions.showThread')->with([
-            'thread'    => $thread,
-            'channel'   => $channel->channel,
-            'username'  => $user->username,
-            'comments'  => $comments
-        ]);
+            $thread->views = $thread->views + 1;
+            $thread->save();
+            $channel = Channel::find($thread->channel_id);
+            $user = User::find($thread->user_id);
+
+            $comments = Comment::with('likes')
+                            ->select('comments.*', 'users.username')
+                            ->where('discussion_id', $thread->id)
+                            ->join('users', 'users.id', 'comments.user_id')
+                            ->orderBy('id', 'asc')
+                            ->paginate(10);
+
+            return view('discussions.showThread')->with([
+                'thread'    => $thread,
+                'channel'   => $channel->channel,
+                'username'  => $user->username,
+                'comments'  => $comments
+            ]);
+        } else {
+            return redirect('/errors/404');
+        }
     }
 
     public function editThread($thread_slug)
@@ -209,16 +224,32 @@ class DiscussionsController extends Controller
         $thread->query          = $request->input('query');
         $thread->save();
 
+        Helper::recordActivity(
+            Auth::user()->id,
+            Auth::user()->username,
+            'edited a thread',
+            $request->input('title'),
+            '/discussions/view/'.$threadSlug
+        );
+
         return redirect('/discussions/view/'.$threadSlug)->with('success', 'Thread updated!');
     }
 
     public function deleteThread($thread_slug)
     {
-        $thread = Discussion::find($request->input('discussion_id'));
+        $thread = Discussion::where('thread_slug', $thread_slug)->first();
         
         $user = User::find(Auth::user()->id);
         $user->experience = $user->experience - 100;
         $user->save();
+
+        Helper::recordActivity(
+            Auth::user()->id,
+            Auth::user()->username,
+            'deleted a thread',
+            $thread->title,
+            ''
+        );
 
         $thread->delete();
 

@@ -30,13 +30,16 @@ Route::get('/discussions/channel/{channel_id}/{channel}', 'DiscussionsController
 /* Profile */
 Route::get('/profile/{username}', 'DashboardController@index');
 
+/* Errors */
+Route::get('/errors/{type}', 'ErrorsController@error');
+
 Route::group(['middleware' => ['auth']], function () {
     /* Discussions */
     Route::get('/discussions/create', 'DiscussionsController@createThread');
     Route::post('/discussions/create', 'DiscussionsController@storeThread');
     Route::get('/discussions/edit/{thread_slug}', 'DiscussionsController@editThread');
     Route::post('/discussions/update', 'DiscussionsController@updateThread');
-    Route::delete('/discussions/delete/{thread_slug}', 'DiscussionsController@deleteThread');
+    Route::get('/discussions/delete/{thread_slug}', 'DiscussionsController@deleteThread');
     Route::get('/discussions/threads', 'DiscussionsController@myThreads');
     Route::get('/discussions/participations', 'DiscussionsController@myParticipations');
 

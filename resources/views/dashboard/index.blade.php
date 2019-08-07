@@ -93,10 +93,26 @@
             <div class="card">
                 <div class="card-header"><h3>Recent Activity</h3></div>
                 <div class="card-body">
-                    <table class="table table-striped">
-                        <tbody>
-                        </tbody>
-                    </table>
+                    @if(count($activityLogs) > 0)
+                        @foreach($activityLogs as $activityLog)
+                            <span><strong>{{ (Auth::user()->id == $activityLog->user_id) ? 'You' : $activityLog->username }}</strong> {{ $activityLog->type }}
+                                @if($activityLog->type == 'added' || $activityLog->type == 'updated')
+                                    @php 
+                                        $explode = explode('-', $activityLog->description);
+                                    @endphp
+                                    <strong>{{ $explode[0] }} </strong>{{ $explode[1] }}<strong> {{ $explode[2] }}</strong>
+                                @elseif($activityLog->type == 'deleted a thread')
+                                    <strong>{{ \Illuminate\Support\Str::limit($activityLog->description, 60) }}<strong>
+                                @else
+                                    <strong><a href="{{ $activityLog->url }}" target="_blank">{{ \Illuminate\Support\Str::limit($activityLog->description, 60) }}</a><strong>
+                                @endif
+                                </span><br>
+                            <small><i class="fa fa-clock-o"></i> {{ \Carbon\Carbon::parse($activityLog->created_at)->diffforhumans() }}</small>
+                            <hr>
+                        @endforeach
+                    @else
+                        <h5><i>No Recent Activity found!</i></h5>
+                    @endif
                 </div>
             </div>
         </div>
