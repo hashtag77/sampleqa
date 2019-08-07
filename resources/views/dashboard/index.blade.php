@@ -102,9 +102,9 @@
                                     @endphp
                                     <strong>{{ $explode[0] }} </strong>{{ $explode[1] }}<strong> {{ $explode[2] }}</strong>
                                 @elseif($activityLog->type == 'deleted a thread')
-                                    <strong>{{ \Illuminate\Support\Str::limit($activityLog->description, 60) }}<strong>
+                                    <strong>{{ \Illuminate\Support\Str::limit($activityLog->description, 60) }}</strong>
                                 @else
-                                    <strong><a href="{{ $activityLog->url }}" target="_blank">{{ \Illuminate\Support\Str::limit($activityLog->description, 60) }}</a><strong>
+                                    <strong><a href="{{ $activityLog->url }}" target="_blank">{{ \Illuminate\Support\Str::limit($activityLog->description, 60) }}</a></strong>
                                 @endif
                                 </span><br>
                             <small><i class="fa fa-clock-o"></i> {{ \Carbon\Carbon::parse($activityLog->created_at)->diffforhumans() }}</small>
