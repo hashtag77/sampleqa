@@ -12,7 +12,11 @@ class ToDosController extends Controller
 {
     public function create()
     {
-        $todos = ToDo::orderBy('created_at', 'desc')->get();
+        $todos = ToDo::select('to_dos.*', 'sections.name as section_name')
+                     ->join('sections', 'sections.id', 'to_dos.section_id')
+                     ->orderBy('to_dos.created_at', 'desc')
+                     ->get();
+                     
         $sections = Section::orderBy('name', 'asc')->get();
 
         return view('todos.create')->with([

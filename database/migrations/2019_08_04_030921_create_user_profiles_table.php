@@ -16,13 +16,13 @@ class CreateUserProfilesTable extends Migration
         Schema::create('user_profiles', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('user_id')->unsigned();
-            $table->string('website');
-            $table->string('github');
-            $table->string('twitter');
-            $table->string('company');
-            $table->string('job_title');
-            $table->string('hometown');
-            $table->integer('country_id')->unsigned();
+            $table->string('website')->nullable();
+            $table->string('github')->nullable();
+            $table->string('twitter')->nullable();
+            $table->string('company')->nullable();
+            $table->string('job_title')->nullable();
+            $table->string('hometown')->nullable();
+            $table->integer('country_id')->unsigned()->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

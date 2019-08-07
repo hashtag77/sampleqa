@@ -49,6 +49,7 @@
             <th>Section</th>
             <th>Status</th>
             <th>Created</th>
+            <th>Completed</th>
             <th>Action</th>
           </thead>
           <tbody>
@@ -58,9 +59,10 @@
               <tr>
                 <td>{{ $counter }}</td>
                 <td>{{ $todo->title }}</td>
-                <td>{{ $todo->section }}</td>
+                <td>{{ $todo->section_name }}</td>
                 <td><span class="badge {{ ($todo->status == "DONE") ? 'badge-success' : 'badge-warning' }}" style="padding: 5px 10px;">{{ $todo->status }}</span></td>
                 <td>{{ \Carbon\Carbon::parse($todo->created_at)->diffforhumans() }}</td>
+                <td>{{ \Carbon\Carbon::parse($todo->updated_at)->diffforhumans() }}</td>
                 <td>
                   @if($todo->status == 'PENDING')
                     <a href="{{ url('/todos/update/'.$todo->id) }}" class="btn btn-dark" title="Mark as DONE"><i class="fa fa-check text-light"></i></a>

@@ -22,9 +22,7 @@
           @if(Auth::user()->permission($thread->user_id))
             <a href="{{ url('/discussions/edit/'.$thread->thread_slug) }}" class="btn btn-sm btn-dark" style="margin-right: 2px; display:inline-block;" title="Edit Thread"><i class="fa fa-edit fa-lg"></i></a>&nbsp;
             @if(count($comments) == 0)
-            <form style="display:inline-block;" method="DELETE" action="{{ url('/discussions/delete/'.$thread->thread_slug) }}">
-              <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash fa-lg" title="Delete Thread"></i></button>
-            </form>
+            <a href="{{ url('/discussions/delete/'.$thread->thread_slug) }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
             @endif
           @endif
         </div>
@@ -41,9 +39,9 @@
           <div style="{{ $comment->helpful == 1 ? "background-color: #e1eaea; border: 1px solid #666666; border-radius: 10px;" : "" }}">
             <div class="row" style="padding: 10px 10px; ">
                 <div class="col-md-8">
-                  <small><a href="{{ url('/profile/'.$comment->username) }}" class="text-danger"><strong>{{ $comment->username }}</strong></a> | {{ \Carbon\Carbon::parse($comment->created_at)->diffforhumans() }} | </small>
+                  <small><a href="{{ url('/profile/'.$comment->username) }}" class="text-danger"><strong>{{ $comment->username }}</strong></a> | {{ \Carbon\Carbon::parse($comment->created_at)->diffforhumans() }}</small>
                   @if(Auth::user()->permission($comment->user_id))
-                    <a href="{{ url('/comments/edit/'.$comment->id.'/'.$thread->thread_slug) }}" class="btn btn-dark btn-sm" title="Edit comment"><i class="fa fa-edit"></i></a>
+                    <small> | </small><a href="{{ url('/comments/edit/'.$comment->id.'/'.$thread->thread_slug) }}" class="btn btn-dark btn-sm" title="Edit comment"><i class="fa fa-edit"></i></a>
                     <a href="{{ url('/comments/delete/'.$comment->id.'/'.$thread->thread_slug) }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                   @endif
                 </div>
@@ -79,7 +77,6 @@
         <div class="form-group">
           <div class="row">
             <input type="hidden" name="discussion_id" value="{{ $thread->id }}">
-            <input type="hidden" name="thread_slug" value="{{ $thread->thread_slug }}">
             <textarea class="form-control" rows="4" name="comment" placeholder="Write a reply..." required></textarea>
           </div>
           <br>

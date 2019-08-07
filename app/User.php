@@ -86,4 +86,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserProfile::class);
     }
+
+    public function activityLogs()
+    {
+        return $this->hasMany(ActivityLog::class)->orderBy('id', 'desc');
+    }
 }

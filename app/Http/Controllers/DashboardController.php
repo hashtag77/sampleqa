@@ -11,16 +11,6 @@ use Illuminate\Http\Request;
 class DashboardController extends Controller
 {
     /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-    /**
      * Show the application dashboard.
      *
      * @return \Illuminate\Contracts\Support\Renderable
@@ -32,6 +22,7 @@ class DashboardController extends Controller
         $threads = DB::table('discussions')
                         ->select('discussions.*', 'channels.channel')
                         ->where('discussions.user_id', $user->id)
+                        ->whereNull('discussions.deleted_at')
                         ->join('channels', 'channels.id', 'discussions.channel_id')
                         ->orderBy('id', 'desc')
                         ->get();
@@ -55,7 +46,8 @@ class DashboardController extends Controller
             'discussions'   => $threads,
             'bestReply'     => count($bestReply),
             'userProfile'   => $userProfile,
-            'userCountry'   => $userCountry
+            'userCountry'   => $userCountry,
+            'activityLogs'  => $user->activityLogs
         ]);
     }
 }

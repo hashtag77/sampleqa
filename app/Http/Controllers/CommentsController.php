@@ -6,6 +6,7 @@ use App\User;
 use App\Like;
 use App\Comment;
 use App\Discussion;
+use Helper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,7 +31,17 @@ class CommentsController extends Controller
             $user->save();
         }
 
-        return $this->redirectTo($request->input('thread_slug'));
+        $thread = Discussion::find($request->input('discussion_id'));
+
+        Helper::recordActivity(
+            Auth::user()->id,
+            Auth::user()->username,
+            'left a reply on',
+            $thread->title,
+            '/discussions/view/'.$thread->thread_slug
+        );
+
+        return $this->redirectTo($thread->thread_slug);
     }
 
     public function likeComment($comment_id)
@@ -40,8 +51,9 @@ class CommentsController extends Controller
                     ->whereNull('deleted_at')
                     ->first();
 
+        $comment = Comment::find($comment_id);
+
         if($likes) {
-            $comment = Comment::find($comment_id);
             if(Auth::user()->id != $comment->user_id) {
                 $user = User::find($comment->user_id);
                 $user->experience = $user->experience - 35;
@@ -56,13 +68,22 @@ class CommentsController extends Controller
             $like->likes        = 1;
             $like->save();
 
-            $comment = Comment::find($comment_id);
             if(Auth::user()->id != $comment->user_id) {
                 $user = User::find($comment->user_id);
                 $user->experience = $user->experience + 35;
                 $user->save();
             }
         }
+
+        $thread = Discussion::find($comment->discussion_id);
+
+        Helper::recordActivity(
+            Auth::user()->id,
+            Auth::user()->username,
+            'liked a comment on',
+            $thread->title,
+            '/discussions/view/'.$thread->thread_slug
+        );
 
         $likesCount = Comment::with('likes')->where('comments.id', $comment_id)->get();
 
@@ -125,7 +146,17 @@ class CommentsController extends Controller
         $comment->comment = $request->input('comment');
         $comment->save();
 
-        return $this->redirectTo($request->input('thread_slug'));
+        $thread = Discussion::find($comment->discussion_id);
+
+        Helper::recordActivity(
+            Auth::user()->id,
+            Auth::user()->username,
+            'edited a comment on',
+            $thread->title,
+            '/discussions/view/'.$thread->thread_slug
+        );
+
+        return $this->redirectTo($thread->thread_slug);
     }
 
     public function deleteComment($comment_id, $thread_slug)
@@ -137,6 +168,16 @@ class CommentsController extends Controller
             $user->experience = $user->experience - 10;
             $user->save();
         }
+
+        $thread = Discussion::find($comment->discussion_id);
+
+        Helper::recordActivity(
+            Auth::user()->id,
+            Auth::user()->username,
+            'deleted a comment from',
+            $thread->title,
+            '/discussions/view/'.$thread->thread_slug
+        );
 
         $comment->delete();
 
