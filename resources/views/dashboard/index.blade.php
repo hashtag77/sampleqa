@@ -4,7 +4,10 @@
 <div class="container-fluid">
     <div class="jumbotron">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-3">
+                <img src="/storage/avatars/{{ $user->avatar }}">
+            </div>
+            <div class="col-md-5">
                 <h2 style="display:inline-block; margin-right: 10px"><strong>{{ $user->name }}</strong></h2>
                 @if(isset($userProfile))
                 <span style="display:inline-block;">
@@ -32,9 +35,9 @@
                 @endif
                 <small>Member since {{ \Carbon\Carbon::parse($user->created_at)->diffforhumans() }}</small>
             </div>
-            <div class="col-md-6" style="justify-content: right">
+            <div class="col-md-4">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <div class="card bg-info">
                             <div class="card-body text-light text-center">
                                 <h3>{{ $user->experience }}</h3>
@@ -42,7 +45,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <div class="card bg-info">
                             <div class="card-body text-light text-center">
                                 <h3>{{ $bestReply }}</h3>

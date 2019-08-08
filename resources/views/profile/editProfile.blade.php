@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<form method="POST" action="{{ url('/profile/update') }}">
+<form method="POST" action="{{ url('/profile/update') }}" enctype="multipart/form-data">
   @csrf
   <div class="container col-md-8">
       <div class="card">
@@ -10,6 +10,12 @@
           </div>
           <div class="card-body">
               <div class="form-group">
+                <div class="row">
+                  <div class="col-md-12 text-center">
+                    <img src="/storage/avatars/{{ $usersData->avatar }}">
+                    <input type="file" class="form-control-file" name="avatar" id="avatarFile" aria-describedby="fileHelp">
+                  </div>
+                </div>    
                 <div class="row">
                   <div class="col-md-6">
                     <label for="name">Name</label>
