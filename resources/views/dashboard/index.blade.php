@@ -95,7 +95,7 @@
                 <div class="card-body">
                     @if(count($activityLogs) > 0)
                         @foreach($activityLogs as $activityLog)
-                            <span><strong>{{ (Auth::user()->id == $activityLog->user_id) ? 'You' : $activityLog->username }}</strong> {{ $activityLog->type }}
+                            <span><strong>{{ (!auth()->guest() && Auth::user()->id == $activityLog->user_id) ? 'You' : $activityLog->username }}</strong> {{ $activityLog->type }}
                                 @if($activityLog->type == 'added' || $activityLog->type == 'updated')
                                     @php 
                                         $explode = explode('-', $activityLog->description);
