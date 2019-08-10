@@ -66,7 +66,10 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $avatar = config('auth.images');
+        $index = array_rand($avatar, 1);
         $user = User::create([
+            'avatar' => $avatar[$index],
             'name' => Str::title($data['name']),
             'username' => '@'.strtoupper($data['username']),
             'email' => $data['email'],

@@ -17,7 +17,7 @@ class DiscussionsController extends Controller
     public function index()
     {
         $threads = Discussion::with('comments')
-                            ->select('discussions.*', 'channels.channel', 'users.username')
+                            ->select('discussions.*', 'channels.channel', 'users.username', 'users.avatar')
                             ->whereNull('discussions.deleted_at')
                             ->join('channels', 'channels.id', 'discussions.channel_id')
                             ->join('users', 'users.id', 'discussions.user_id')
@@ -36,7 +36,7 @@ class DiscussionsController extends Controller
     public function myThreads()
     {
         $threads = Discussion::with('comments')
-                        ->select('discussions.*', 'channels.channel', 'users.username')
+                        ->select('discussions.*', 'channels.channel', 'users.username', 'users.avatar')
                         ->where('discussions.user_id', Auth::user()->id)
                         ->join('channels', 'channels.id', 'discussions.channel_id')
                         ->join('users', 'users.id', 'discussions.user_id')
@@ -52,7 +52,7 @@ class DiscussionsController extends Controller
     public function myParticipations()
     {
         $threads = Discussion::with('comments')
-                        ->select('discussions.*', 'channels.channel', 'users.username')
+                        ->select('discussions.*', 'channels.channel', 'users.username', 'users.avatar')
                         ->whereNull('discussions.deleted_at')
                         ->where('comments.user_id', Auth::user()->id)
                         ->orWhere('discussions.user_id', Auth::user()->id)
@@ -71,7 +71,7 @@ class DiscussionsController extends Controller
     public function solved()
     {
         $threads = Discussion::with('comments')
-                        ->select('discussions.*', 'channels.channel', 'users.username')
+                        ->select('discussions.*', 'channels.channel', 'users.username', 'users.avatar')
                         ->where('discussions.status', 'SOLVED')
                         ->join('channels', 'channels.id', 'discussions.channel_id')
                         ->join('users', 'users.id', 'discussions.user_id')
@@ -87,7 +87,7 @@ class DiscussionsController extends Controller
     public function unsolved()
     {
         $threads = Discussion::with('comments')
-                        ->select('discussions.*', 'channels.channel', 'users.username')
+                        ->select('discussions.*', 'channels.channel', 'users.username', 'users.avatar')
                         ->where('discussions.status', 'UNSOLVED')
                         ->join('channels', 'channels.id', 'discussions.channel_id')
                         ->join('users', 'users.id', 'discussions.user_id')
@@ -103,7 +103,7 @@ class DiscussionsController extends Controller
     public function noreplies()
     {
         $threads = Discussion::with('comments')
-                        ->select('discussions.*', 'channels.channel', 'users.username')
+                        ->select('discussions.*', 'channels.channel', 'users.username', 'users.avatar')
                         ->whereNull('discussions.deleted_at')
                         ->join('channels', 'channels.id', 'discussions.channel_id')
                         ->join('users', 'users.id', 'discussions.user_id')
@@ -119,7 +119,7 @@ class DiscussionsController extends Controller
     public function channel($channel_id, $channel)
     {
         $threads = Discussion::with('comments')
-                        ->select('discussions.*', 'channels.channel', 'users.username')
+                        ->select('discussions.*', 'channels.channel', 'users.username', 'users.avatar')
                         ->whereNull('discussions.deleted_at')
                         ->where('discussions.channel_id', $channel_id)
                         ->join('channels', 'channels.id', 'discussions.channel_id')
@@ -181,7 +181,7 @@ class DiscussionsController extends Controller
             $user = User::find($thread->user_id);
 
             $comments = Comment::with('likes')
-                            ->select('comments.*', 'users.username')
+                            ->select('comments.*', 'users.username', 'users.avatar')
                             ->where('discussion_id', $thread->id)
                             ->join('users', 'users.id', 'comments.user_id')
                             ->orderBy('id', 'asc')
@@ -190,7 +190,7 @@ class DiscussionsController extends Controller
             return view('discussions.showThread')->with([
                 'thread'    => $thread,
                 'channel'   => $channel->channel,
-                'username'  => $user->username,
+                'user'      => $user,
                 'comments'  => $comments
             ]);
         } else {

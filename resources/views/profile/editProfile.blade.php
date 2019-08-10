@@ -12,7 +12,7 @@
               <div class="form-group">
                 <div class="row">
                   <div class="col-md-12 text-center">
-                    <img src="/storage/avatars/{{ $usersData->avatar }}">
+                    <img src="/storage/avatars/{{ $usersData->avatar }}" style="width: 200px; height: 200px; border-radius: 110px">
                     <input type="file" class="form-control-file" name="avatar" id="avatarFile" aria-describedby="fileHelp">
                   </div>
                 </div>    
