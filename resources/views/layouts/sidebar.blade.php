@@ -71,7 +71,7 @@
                                       <img src="{{ url('/storage/avatars/'.$notification->avatar) }}" style="width: 35px; height: 35px; border-radius: 17px">
                                       <strong> {{ $notification->username }} </strong>
                                       {{ $notification->type }}<br>
-                                      <strong> {{ $notification->description }} {{ ($notification->xp != '') ? '('.$notification->xp.')' : '' }}</strong>
+                                      <strong> {{ $notification->description }} <span class="badge badge-info">{{ ($notification->xp != '') ? '('.$notification->xp.')' : '' }}</span></strong>
                                       <br>
                                       <small>{{ \Carbon\Carbon::parse($notification->created_at)->diffforhumans() }}</small>
                                     </div>

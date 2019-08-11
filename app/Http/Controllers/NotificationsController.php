@@ -24,6 +24,7 @@ class NotificationsController extends Controller
         $notifications = Notification::select('notifications.*', 'users.avatar')
                                     ->where('user_id', Auth::user()->id)
                                     ->join('users', 'users.username', 'notifications.username')
+                                    ->orderBy('id', 'desc')
                                     ->get();
         
         foreach ($notifications as $notification) {

@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
   <div class="card">
-    <div class="card-header">
+    <div class="card-header" style="margin-bottom: 15px">
       <h2><i class="fa fa-bell"></i> <u>{{ $pageTitle }}</u></h2>
     </div>
     @if(count($notifications) > 0)
@@ -15,6 +15,8 @@
                   <img src="{{ url('/storage/avatars/'.$notification->avatar) }}" style="width: 35px; height: 35px; border-radius: 17px">
                   <strong> {{ $notification->username }}</strong> {{ $notification->type }} <strong>{{ $notification->description }}</strong>
                 </a>
+                <br>
+                <span class="badge badge-info" style="margin-left: 45px">{{ ($notification->xp != '') ? '('.$notification->xp.')' : '' }}</span>
               </div>
               <div class="col-md-2" style="text-align: right">
                 <small>{{ \Carbon\Carbon::parse($notification->created_at)->diffforhumans() }}</small>
