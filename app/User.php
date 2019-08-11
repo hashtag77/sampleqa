@@ -3,6 +3,7 @@
 namespace App;
 
 use Auth;
+use App\Notification;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -90,5 +91,28 @@ class User extends Authenticatable
     public function activityLogs()
     {
         return $this->hasMany(ActivityLog::class)->orderBy('id', 'desc');
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+
+    public function getRecentNotifications()
+    {
+        return Notification::select('notifications.*', 'users.avatar')
+                            ->where('user_id', Auth::id())
+                            ->where('view_status', 0)
+                            ->join('users', 'users.username', 'notifications.username')
+                            ->orderBy('id', 'desc')
+                            ->take(4)
+                            ->get();
+    }
+
+    public function notificationsCount()
+    {
+        return Notification::where('user_id', Auth::id())
+                            ->where('view_status', 0)
+                            ->count();
     }
 }
