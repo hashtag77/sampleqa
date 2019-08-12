@@ -4,7 +4,7 @@
 <div class="container">
   <div class="card">
     <div class="card-header">
-      <h2><u>{{ $pageTitle }}</u></h2>
+      <h2>{!! $pageTitle !!}</h2>
     </div>
     @if(count($threads))
       @foreach($threads as $thread)

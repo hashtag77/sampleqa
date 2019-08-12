@@ -28,7 +28,7 @@ class DiscussionsController extends Controller
 
         return view('discussions.index')->with([
             'threads'   => $threads,
-            'pageTitle' => 'All Threads',
+            'pageTitle' => '<i class="fa fa-th-list"></i> All Threads',
             'channels'  => $channels
         ]);
     }
@@ -45,7 +45,7 @@ class DiscussionsController extends Controller
 
         return view('discussions.index')->with([
             'threads'   => $threads,
-            'pageTitle' => 'My Threads'
+            'pageTitle' => '<i class="fa fa-question"></i> My Threads'
         ]);
     }
 
@@ -64,7 +64,7 @@ class DiscussionsController extends Controller
         
         return view('discussions.index')->with([
             'threads'   => $threads,
-            'pageTitle' => 'My Participations'
+            'pageTitle' => '<i class="fa fa-hand-paper-o"></i> My Participations'
         ]);
     }
 
@@ -80,7 +80,7 @@ class DiscussionsController extends Controller
 
         return view('discussions.index')->with([
             'threads'   => $threads,
-            'pageTitle' => 'Solved'
+            'pageTitle' => '<i class="fa fa-check"></i> Solved'
         ]);
     }
 
@@ -96,7 +96,7 @@ class DiscussionsController extends Controller
 
         return view('discussions.index')->with([
             'threads'   => $threads,
-            'pageTitle' => 'Unsolved'
+            'pageTitle' => '<i class="fa fa-times"></i> Unsolved'
         ]);
     }
 
@@ -112,7 +112,7 @@ class DiscussionsController extends Controller
 
         return view('discussions.noReplies')->with([
             'threads'   => $threads,
-            'pageTitle' => 'No Replies Yet'
+            'pageTitle' => '<i class="fa fa-minus"></i> No Replies Yet'
         ]);
     }
 

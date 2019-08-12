@@ -6,7 +6,7 @@
   <div class="container">
         <div class="card">
             <div class="card-header">
-                <h3>Edit Thread</h3>
+                <h3><i class="fa fa-pencil"></i> Edit Thread</h3>
             </div>
             <div class="card-body">
                 <div class="form-group">

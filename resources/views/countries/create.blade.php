@@ -6,7 +6,7 @@
 <div class="container">
   <div class="card">
     <div class="card-header">
-      <h3>Add new Country</h3>
+      <h3><i class="fa fa-plus"></i> Add new Country</h3>
     </div>
     <div class="card-body">
       <div class="form-group">
@@ -31,7 +31,7 @@
 <div class="container">
   <div class="card">
     <div class="card-header">
-      <h3>Already added Countries</h3>
+      <h3><i class="fa fa-globe"></i> Already added Countries</h3>
     </div>
     <div class="card-body">
       @foreach($countries as $country)

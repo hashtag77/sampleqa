@@ -6,7 +6,7 @@
   <div class="container col-md-8">
       <div class="card">
           <div class="card-header">
-              <h3>Edit Profile</h3>
+              <h3><i class="fa fa-pencil"></i> Edit Profile</h3>
           </div>
           <div class="card-body">
               <div class="form-group">

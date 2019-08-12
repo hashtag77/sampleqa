@@ -62,7 +62,7 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header"><h3>My Threads</h3></div>
+                    <div class="card-header"><h3><i class="fa fa-question"></i> My Threads</h3></div>
                     <div class="card-body">
                         <table class="table table-striped">
                             <thead>
@@ -95,7 +95,7 @@
             </div>
             <div class="col-md-4">
                 <div class="card">
-                    <div class="card-header"><h3>Recent Activity</h3></div>
+                    <div class="card-header"><h3><i class="fa fa-ioxhost"></i> Recent Activity</h3></div>
                     <div class="card-body">
                         @if(count($activityLogs) > 0)
                             @foreach($activityLogs as $activityLog)
