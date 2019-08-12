@@ -67,13 +67,17 @@
                                 @if(Auth::user()->notificationsCount() > 0)
                                   @foreach(Auth::user()->getRecentNotifications() as $notification)
                                   <a class="dropdown-item" href="{{ url('/notifications/'.$notification->id) }}" style="font-size: 12px; padding: 0.25rem 0.5rem;">
-                                    <div class="row" style="display:inline-block; padding: 0px 20px">
-                                      <img src="{{ url('/storage/avatars/'.$notification->avatar) }}" style="width: 35px; height: 35px; border-radius: 17px">
-                                      <strong> {{ $notification->username }} </strong>
-                                      {{ $notification->type }}<br>
-                                      <strong> {{ $notification->description }} <span class="badge badge-info">{{ ($notification->xp != '') ? '('.$notification->xp.')' : '' }}</span></strong>
-                                      <br>
-                                      <small>{{ \Carbon\Carbon::parse($notification->created_at)->diffforhumans() }}</small>
+                                    <div class="row" style="padding: 0px 20px">
+                                      <div class="column">
+                                        <img src="{{ url('/storage/avatars/'.$notification->avatar) }}" style="width: 35px; height: 35px; border-radius: 17px">
+                                      </div>
+                                      <div class="column">
+                                        <strong> {{ $notification->username }} </strong>
+                                        {{ $notification->type }}<br>
+                                        <strong> {{ $notification->description }} <span class="badge badge-info">{{ ($notification->xp != '') ? '('.$notification->xp.')' : '' }}</span></strong>
+                                        <br>
+                                        <small>{{ \Carbon\Carbon::parse($notification->created_at)->diffforhumans() }}</small>
+                                      </div>
                                     </div>
                                   </a>
                                   <hr>
