@@ -63,15 +63,15 @@
                                 <span class="badge">{{ Auth::user()->notificationsCount() }}</span>
                                 @endif
                               </a>
-                              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="width: 300px">
                                 @if(Auth::user()->notificationsCount() > 0)
                                   @foreach(Auth::user()->getRecentNotifications() as $notification)
-                                  <a class="dropdown-item" href="{{ url('/notifications/'.$notification->id) }}" style="font-size: 12px; padding: 0.25rem 0.5rem;">
+                                  <a class="dropdown-item" href="{{ url('/notifications/'.$notification->id) }}" style="font-size: 12px; padding: 0.25rem 0.5rem; white-space: unset;">
                                     <div class="row" style="padding: 0px 20px">
                                       <div class="column">
                                         <img src="{{ url('/storage/avatars/'.$notification->avatar) }}" style="width: 35px; height: 35px; border-radius: 17px">
                                       </div>
-                                      <div class="column">
+                                      <div class="column" style="margin-left: 10px">
                                         <strong> {{ $notification->username }} </strong>
                                         {{ $notification->type }}<br>
                                         <strong> {{ $notification->description }} <span class="badge badge-info">{{ ($notification->xp != '') ? '('.$notification->xp.')' : '' }}</span></strong>
