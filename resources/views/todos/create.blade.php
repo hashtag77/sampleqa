@@ -7,7 +7,7 @@
       @csrf
       <div class="card">
         <div class="card-header">
-          <h3>Create a TODO</h3>
+          <h3><i class="fa fa-plus"></i> Create a TODO</h3>
         </div>
         <div class="card-body">
           <div class="form-group">
@@ -38,7 +38,7 @@
   <div class="container-fluid col-md-8">
     <div class="card">
       <div class="card-header">
-        <h3>TODOs</h3>
+        <h3><i class="fa fa-check-square-o"></i> TODOs</h3>
       </div>
       <div class="card-body">
         @if(count($todos) > 0)

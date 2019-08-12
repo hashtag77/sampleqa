@@ -6,7 +6,7 @@
 <div class="container">
       <div class="card">
           <div class="card-header">
-              <h3>Create a Channel</h3>
+              <h3><i class="fa fa-plus"></i> Create a Channel</h3>
           </div>
           <div class="card-body">
               <div class="form-group">
@@ -22,7 +22,7 @@
 <div class="container">
     <div class="card">
       <div class="card-header">
-        <h3>Already added Channels</h3>
+        <h3><i class="fa fa-assistive-listening-systems"></i> Already added Channels</h3>
       </div>
       <div class="card-body">
         @foreach($channels as $channel)

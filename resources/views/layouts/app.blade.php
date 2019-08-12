@@ -58,26 +58,26 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ url('/profile/'.Auth::user()->username) }}">Dashboard</a>
-                                    <a class="dropdown-item" href="{{ url('/profile/'.Auth::user()->username.'/edit') }}">Edit Profile</a>
+                                    <a class="dropdown-item" href="{{ url('/profile/'.Auth::user()->username) }}"><i class="fa fa-th"></i> Dashboard</a>
+                                    <a class="dropdown-item" href="{{ url('/profile/'.Auth::user()->username.'/edit') }}"><i class="fa fa-user"></i> Edit Profile</a>
                                     @if(Auth::user()->hasRole('admin'))
                                     <a class="dropdown-item" href="{{ url('/channels/create') }}">
-                                         Add Channel
+                                        <i class="fa fa-assistive-listening-systems"></i> Add Channel
                                      </a>
                                      <a class="dropdown-item" href="{{ url('/countries/create') }}">
-                                        Add Country
+                                        <i class="fa fa-globe"></i> Add Country
                                     </a>
                                     <a class="dropdown-item" href="{{ url('/todos/create') }}">
-                                        Add TODO
+                                        <i class="fa fa-check-square-o"></i> Add TODO
                                     </a>
                                     <a class="dropdown-item" href="{{ url('/sections/create') }}">
-                                        Add Section
+                                        <i class="fa fa-columns"></i> Add Section
                                     </a>
                                      @endif
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        <i class="fa fa-sign-out"></i> {{ __('Logout') }}
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

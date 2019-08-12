@@ -7,7 +7,7 @@
       @csrf
       <div class="card">
         <div class="card-header">
-          <h3>Create a Section</h3>
+          <h3><i class="fa fa-plus"></i> Create a Section</h3>
         </div>
         <div class="card-body">
           <div class="form-group">
@@ -24,7 +24,7 @@
   <div class="container-fluid col-md-8">
     <div class="card">
       <div class="card-header">
-        <h3>Sections</h3>
+        <h3><i class="fa fa-columns"></i> Sections</h3>
       </div>
       <div class="card-body">
         @if(count($sections) > 0)
