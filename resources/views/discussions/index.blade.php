@@ -9,24 +9,26 @@
     @if(count($threads))
       @foreach($threads as $thread)
       <div class="card-body">
-        <div class="row">
-          <div class="col-md-8">
-            <h3><a href="{{ url('/discussions/view/'.$thread->thread_slug) }}">{{ $thread->title }}</a></h3>
-          </div>
-          <div class="col-md-2" style="text-align: right">
-            <i class="fa fa-eye fa-lg" title="Total number of views"></i> <span class="badge badge-primary">{{ $thread->views }}</span>&nbsp;
-            <i class="fa fa-comments fa-lg" title="Total number of comments"></i> <span class="badge badge-primary">{{ count($thread->comments) }}</span>
-          </div>
-          <div class="col-md-2" style="text-align: right">
-            <a href="{{ url('/discussions/channel/'.$thread->channel_id.'/'.$thread->channel) }}" class="badge badge-dark" style="padding: 10px 15px" title="Channel Threads">{{ $thread->channel }}</a>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-4">
-            <small><a href="{{ url('/profile/'.$thread->username) }}" class="text-danger"><strong>{{ $thread->username }}</strong></a> | {{ \Carbon\Carbon::parse($thread->updated_at)->diffforhumans() }} </small>
-            @if($thread->status == "SOLVED")
-              <span class="badge" style="border-radius: 1.24rem; background-color: #b3ff66; color: #000; font-size: 11px; padding: 4px 6px;">SOLVED</span>
-            @endif
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-1">
+            <img src="{{ url('/storage/avatars/'.$thread->avatar) }}" style="{{ ($thread->status == 'SOLVED' ? 'opacity: 0.5;' : '') }}width: 50px; height: 50px; border-radius: 15px">
+            </div>
+            <div class="col-md-11">
+              <div class="row">
+                <div class="col-md-8">
+                  <h3><a href="{{ url('/discussions/view/'.$thread->thread_slug) }}">{{ $thread->title }}</a></h3>
+                  <small><span class="text-danger"><strong>{{ $thread->username }}</strong></span> | {{ \Carbon\Carbon::parse($thread->updated_at)->diffforhumans() }}</small>
+                </div>
+                <div class="col-md-2" style="text-align: right">
+                  <i class="fa fa-eye fa-lg" title="Total number of views"></i> <span class="badge badge-primary">{{ $thread->views }}</span>&nbsp;
+                  <i class="fa fa-comments fa-lg" title="Total number of comments"></i> <span class="badge badge-primary">{{ count($thread->comments) }}</span>
+                </div>
+                <div class="col-md-2" style="text-align: right">
+                  <a href="{{ url('/discussions/channel/'.$thread->channel_id.'/'.$thread->channel) }}" class="badge badge-dark" style="padding: 10px 15px" title="Channel Threads">{{ $thread->channel }}</a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

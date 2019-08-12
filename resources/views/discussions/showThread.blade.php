@@ -5,8 +5,11 @@
   <div class="card">
     <div class="card-body">
       <div class="row">
-        <div class="col-md-10">
-          <h6><a href="{{ url('/profile/'.$username) }}" class="text-danger"><strong>{{ $username }}</strong></a></h6><small>{{ \Carbon\Carbon::parse($thread->updated_at)->diffforhumans() }}</small>
+        <div class="col-md-1" style="padding-left: 25px;">
+          <img src="{{ url('/storage/avatars/'.$user->avatar) }}" style="width: 45px; height: 45px; border-radius: 15px">
+        </div>
+        <div class="col-md-9">
+          <h6><a href="{{ url('/profile/'.$user->username) }}" class="text-danger"><strong>{{ $user->username }}</strong></a></h6><small>{{ \Carbon\Carbon::parse($thread->updated_at)->diffforhumans() }}</small>
         </div>
         <div class="col-md-2" style="padding-top: 13px; text-align: right; ">
           <a href="{{ url('/discussions/channel/'.$thread->channel_id.'/'.$channel) }}" class="badge badge-primary" style="color: #fff; font-size: 14px; padding: 7px 18px" title="Channel Threads">{{ $channel }}</a>
@@ -41,6 +44,7 @@
           <div style="{{ $comment->helpful == 1 ? "background-color: #e1eaea; border: 1px solid #666666; border-radius: 10px;" : "" }}">
             <div class="row" style="padding: 10px 10px; ">
                 <div class="col-md-8">
+                  <img src="{{ url('/storage/avatars/'.$comment->avatar) }}" style="width: 35px; height: 35px; border-radius: 15px">
                   <small><a href="{{ url('/profile/'.$comment->username) }}" class="text-danger"><strong>{{ $comment->username }}</strong></a> | {{ \Carbon\Carbon::parse($comment->created_at)->diffforhumans() }}</small>
                   @auth
                     @if(Auth::user()->permission($comment->user_id))

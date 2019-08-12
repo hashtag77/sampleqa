@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use Helper;
 use App\User;
 use App\Country;
+use Carbon\Carbon;
 use App\UserProfile;
-use Helper;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -28,8 +29,19 @@ class UsersController extends Controller
 
     public function updateProfile(Request $request)
     {
+        $request->validate([
+            'avatar' => 'image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
         $user = User::find(Auth::user()->id);
         $user->name = $request->input('name');
+
+        if($request->has('avatar')) {
+            $avatarName = $user->username.'_avatar_'.Carbon::now()->format('YmdHis').'.'.request()->avatar->getClientOriginalExtension();
+            $request->avatar->storeAs('avatars', $avatarName);
+
+            $user->avatar = $avatarName;
+        }
 
         $usersProfile = UserProfile::where('user_id', $user->id)->first();
         if($usersProfile){
