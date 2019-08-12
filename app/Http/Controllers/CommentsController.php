@@ -17,6 +17,11 @@ class CommentsController extends Controller
         return redirect('/discussions/view/'.$param);
     }
 
+    public function sendNotification($user_id, $username, $type, $description, $url, $xp)
+    {
+        Helper::notify($user_id, $username, $type, $description, $url, $xp);
+    }
+
     public function postComment(Request $request)
     {
         $comment = new Comment();
@@ -32,6 +37,15 @@ class CommentsController extends Controller
         }
 
         $thread = Discussion::find($request->input('discussion_id'));
+
+        $this->sendNotification(
+            $thread->user_id,
+            Auth::user()->username,
+            'left a reply on',
+            $thread->title,
+            '/discussions/view/'.$thread->thread_slug,
+            ''
+        );
 
         Helper::recordActivity(
             Auth::user()->id,
@@ -52,6 +66,7 @@ class CommentsController extends Controller
                     ->first();
 
         $comment = Comment::find($comment_id);
+        $thread = Discussion::find($comment->discussion_id);
 
         if($likes) {
             if(Auth::user()->id != $comment->user_id) {
@@ -59,8 +74,24 @@ class CommentsController extends Controller
                 $user->experience = $user->experience - 35;
                 $user->save();
             }
-
             $likes->delete();
+
+            $this->sendNotification(
+                $comment->user_id,
+                Auth::user()->username,
+                'disliked your comment on',
+                $thread->title,
+                '/discussions/view/'.$thread->thread_slug,
+                '-35 XP'
+            );
+
+            Helper::recordActivity(
+                Auth::user()->id,
+                Auth::user()->username,
+                'disliked a comment on',
+                $thread->title,
+                '/discussions/view/'.$thread->thread_slug
+            );
         } else {
             $like               = new Like();
             $like->comment_id   = $comment_id;
@@ -73,17 +104,24 @@ class CommentsController extends Controller
                 $user->experience = $user->experience + 35;
                 $user->save();
             }
+
+            $this->sendNotification(
+                $comment->user_id,
+                Auth::user()->username,
+                'liked your comment on',
+                $thread->title,
+                '/discussions/view/'.$thread->thread_slug,
+                '+35 XP'
+            );
+
+            Helper::recordActivity(
+                Auth::user()->id,
+                Auth::user()->username,
+                'liked a comment on',
+                $thread->title,
+                '/discussions/view/'.$thread->thread_slug
+            );
         }
-
-        $thread = Discussion::find($comment->discussion_id);
-
-        Helper::recordActivity(
-            Auth::user()->id,
-            Auth::user()->username,
-            'liked a comment on',
-            $thread->title,
-            '/discussions/view/'.$thread->thread_slug
-        );
 
         $likesCount = Comment::with('likes')->where('comments.id', $comment_id)->get();
 
@@ -108,6 +146,15 @@ class CommentsController extends Controller
         $thread->status = "SOLVED";
         $thread->save();
 
+        $this->sendNotification(
+            $comment->user_id,
+            Auth::user()->username,
+            'marked your comment as',
+            'Best Answer',
+            '/discussions/view/'.$thread->thread_slug,
+            '+1000 XP'
+        );
+
         return $this->redirectTo($thread_slug); 
     }
 
@@ -126,6 +173,15 @@ class CommentsController extends Controller
         $thread = Discussion::where('id', $comment->discussion_id)->first();
         $thread->status = "UNSOLVED";
         $thread->save();
+
+        $this->sendNotification(
+            $comment->user_id,
+            Auth::user()->username,
+            'unmarked your comment from',
+            'Best Answer',
+            '/discussions/view/'.$thread->thread_slug,
+            '-1000 XP'
+        );
 
         return $this->redirectTo($thread_slug);
     }
@@ -170,6 +226,15 @@ class CommentsController extends Controller
         }
 
         $thread = Discussion::find($comment->discussion_id);
+
+        $this->sendNotification(
+            $thread->user_id,
+            Auth::user()->username,
+            'deleted his comment from',
+            $thread->title,
+            '/discussions/view/'.$thread->thread_slug,
+            ''
+        );
 
         Helper::recordActivity(
             Auth::user()->id,

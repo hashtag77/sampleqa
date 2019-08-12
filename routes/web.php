@@ -72,4 +72,8 @@ Route::group(['middleware' => ['auth']], function () {
     /* Sections */
     Route::get('/sections/create', 'SectionsController@create');
     Route::post('/sections/store', 'SectionsController@store');
+
+    /* Notifications */
+    Route::get('/notifications/{id}', 'NotificationsController@getNotification');
+    Route::get('/notifications/view/all', 'NotificationsController@getAllNotifications');
 });

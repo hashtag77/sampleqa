@@ -13,7 +13,7 @@
           <div class="col-md-12">
             <div class="row">
               <div class="col-md-1">
-              <img src="{{ url('/storage/avatars/'.$thread->avatar) }}" style="{{ ($thread->status == 'SOLVED' ? 'opacity: 0.5;' : '') }}width: 50px; height: 50px; border-radius: 15px">
+              <img src="{{ url('/storage/avatars/'.$thread->avatar) }}" style="{{ ($thread->status == 'SOLVED' ? 'opacity: 0.5;' : '') }}width: 50px; height: 50px; border-radius: 25px">
               </div>
               <div class="col-md-11">
                 <div class="row">

@@ -24,6 +24,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/general.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
@@ -55,6 +56,39 @@
                                 </li>
                             @endif
                         @else
+                            <li class="nav-item dropdown">
+                              <a id="navbarDropdown" class="nav-link notification" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-bell fa-lg"></i>
+                                @if(Auth::user()->notificationsCount() >= 1)
+                                <span class="badge">{{ Auth::user()->notificationsCount() }}</span>
+                                @endif
+                              </a>
+                              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="width: 300px">
+                                @if(Auth::user()->notificationsCount() > 0)
+                                  @foreach(Auth::user()->getRecentNotifications() as $notification)
+                                  <a class="dropdown-item" href="{{ url('/notifications/'.$notification->id) }}" style="font-size: 12px; padding: 0.25rem 0.5rem; white-space: unset;">
+                                    <div class="row" style="padding: 0px 20px">
+                                      <div class="column">
+                                        <img src="{{ url('/storage/avatars/'.$notification->avatar) }}" style="width: 35px; height: 35px; border-radius: 17px">
+                                      </div>
+                                      <div class="column" style="margin-left: 10px">
+                                        <strong> {{ $notification->username }} </strong>
+                                        {{ $notification->type }}<br>
+                                        <strong> {{ $notification->description }} <span class="badge badge-info">{{ ($notification->xp != '') ? '('.$notification->xp.')' : '' }}</span></strong>
+                                        <br>
+                                        <small>{{ \Carbon\Carbon::parse($notification->created_at)->diffforhumans() }}</small>
+                                      </div>
+                                    </div>
+                                  </a>
+                                  <hr>
+                                  @endforeach
+                                @else
+                                  <span class="dropdown-item"><i>No new notifications!</i></span>
+                                  <hr>
+                                @endif
+                                <a class="dropdown-item text-center" href="{{ url('/notifications/view/all') }}" style="color: #3490dc;"><strong>View All Notifications</strong></a>
+                              </div>
+                            </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                   <img src="{{ url('/storage/avatars/'.Auth::user()->avatar) }}" style="width: 30px; height: 30px; border-radius: 15px">  {{ Auth::user()->name }} <span class="caret"></span>
