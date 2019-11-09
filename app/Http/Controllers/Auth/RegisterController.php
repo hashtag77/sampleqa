@@ -68,6 +68,14 @@ class RegisterController extends Controller
     {
         $avatar = config('auth.images');
         $index = array_rand($avatar, 1);
+
+        $flag = true;
+        $userData = User::all();
+
+        if(count($userData) > 0) {
+            $flag = false;   
+        }
+
         $user = User::create([
             'avatar' => $avatar[$index],
             'name' => Str::title($data['name']),
@@ -76,8 +84,13 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
 
-        $user->roles()
-             ->attach(Role::where('name', 'user')->first());
+        if($flag) {
+            $user->roles()
+                    ->attach(Role::where('name', 'admin')->first());
+        } else {
+            $user->roles()
+                    ->attach(Role::where('name', 'user')->first());
+        }
 
         return $user;
     }
