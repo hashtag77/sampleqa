@@ -20,12 +20,14 @@ Auth::routes();
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 
 /* Discussions */
-Route::get('/discussions', 'DiscussionsController@index');
-Route::get('/discussions/view/{thread_slug}', 'DiscussionsController@showThread');
-Route::get('/discussions/solved', 'DiscussionsController@solved');
-Route::get('/discussions/unsolved', 'DiscussionsController@unsolved');
-Route::get('/discussions/noreplies', 'DiscussionsController@noreplies');
-Route::get('/discussions/channel/{channel_id}/{channel}', 'DiscussionsController@channel');
+Route::group(['prefix' => 'discussions'], function () {
+    Route::get('/', 'DiscussionsController@index');
+    Route::get('view/{thread_slug}', 'DiscussionsController@showThread');
+    Route::get('solved', 'DiscussionsController@solved');
+    Route::get('unsolved', 'DiscussionsController@unsolved');
+    Route::get('noreplies', 'DiscussionsController@noreplies');
+    Route::get('channel/{channel_id}/{channel}', 'DiscussionsController@channel');
+});
 
 /* Profile */
 Route::get('/profile/{username}', 'DashboardController@index');
@@ -35,45 +37,61 @@ Route::get('/errors/{type}', 'ErrorsController@error');
 
 Route::group(['middleware' => ['auth']], function () {
     /* Discussions */
-    Route::get('/discussions/create', 'DiscussionsController@createThread');
-    Route::post('/discussions/create', 'DiscussionsController@storeThread');
-    Route::get('/discussions/edit/{thread_slug}', 'DiscussionsController@editThread');
-    Route::post('/discussions/update', 'DiscussionsController@updateThread');
-    Route::get('/discussions/delete/{thread_slug}', 'DiscussionsController@deleteThread');
-    Route::get('/discussions/threads', 'DiscussionsController@myThreads');
-    Route::get('/discussions/participations', 'DiscussionsController@myParticipations');
+    Route::group(['prefix' => 'discussions'], function () {
+        Route::get('create', 'DiscussionsController@createThread');
+        Route::post('create', 'DiscussionsController@storeThread');
+        Route::get('edit/{thread_slug}', 'DiscussionsController@editThread');
+        Route::post('update', 'DiscussionsController@updateThread');
+        Route::get('delete/{thread_slug}', 'DiscussionsController@deleteThread');
+        Route::get('threads', 'DiscussionsController@myThreads');
+        Route::get('participations', 'DiscussionsController@myParticipations'); 
+    });
 
     /* Channels */
-    Route::get('/channels/create', 'ChannelsController@createChannel');
-    Route::post('/channels/create', 'ChannelsController@storeChannel');
+    Route::group(['prefix' => 'channels'], function () {
+        Route::get('create', 'ChannelsController@createChannel');
+        Route::post('create', 'ChannelsController@storeChannel'); 
+    });
 
     /* Comments */
-    Route::post('/comments/post', 'CommentsController@postComment');
-    Route::post('/comments/like/{comment_id}', 'CommentsController@likeComment');
-    Route::get('/comments/helpful/{comment_id}/{thread_slug}', 'CommentsController@helpfulComment');
-    Route::get('/comments/notHelpful/{comment_id}/{thread_slug}', 'CommentsController@notHelpfulComment');    
-    Route::get('/comments/edit/{comment_id}/{thread_slug}', 'CommentsController@editComment');
-    Route::post('/comments/update', 'CommentsController@updateComment');
-    Route::get('/comments/delete/{comment_id}/{thread_slug}', 'CommentsController@deleteComment');
+    Route::group(['prefix' => 'comments'], function () {
+        Route::post('post', 'CommentsController@postComment');
+        Route::post('like/{comment_id}', 'CommentsController@likeComment');
+        Route::get('helpful/{comment_id}/{thread_slug}', 'CommentsController@helpfulComment');
+        Route::get('notHelpful/{comment_id}/{thread_slug}', 'CommentsController@notHelpfulComment');    
+        Route::get('edit/{comment_id}/{thread_slug}', 'CommentsController@editComment');
+        Route::post('update', 'CommentsController@updateComment');
+        Route::get('delete/{comment_id}/{thread_slug}', 'CommentsController@deleteComment'); 
+    });
     
     /* Profile */
-    Route::get('/profile/{username}/edit', 'UsersController@editProfile');
-    Route::post('/profile/update', 'UsersController@updateProfile');
+    Route::group(['prefix' => 'profile'], function () {
+        Route::get('/{username}/edit', 'UsersController@editProfile');
+        Route::post('update', 'UsersController@updateProfile');
+    });
 
     /* Countries */
-    Route::get('/countries/create', 'CountriesController@create');
-    Route::post('/countries/create', 'CountriesController@store');
+    Route::group(['prefix' => 'countries'], function () {
+        Route::get('create', 'CountriesController@create');
+        Route::post('create', 'CountriesController@store');
+    });
 
     /* TODOs*/
-    Route::get('/todos/create', 'ToDosController@create');
-    Route::post('/todos/store', 'ToDosController@store');
-    Route::get('/todos/update/{todo_id}', 'ToDosController@update');
+    Route::group(['prefix' => 'todos'], function () {
+        Route::get('create', 'ToDosController@create');
+        Route::post('store', 'ToDosController@store');
+        Route::get('update/{todo_id}', 'ToDosController@update'); 
+    });
 
     /* Sections */
-    Route::get('/sections/create', 'SectionsController@create');
-    Route::post('/sections/store', 'SectionsController@store');
+    Route::group(['prefix' => 'section'], function () {
+        Route::get('create', 'SectionsController@create');
+        Route::post('store', 'SectionsController@store'); 
+    });
 
     /* Notifications */
-    Route::get('/notifications/{id}', 'NotificationsController@getNotification');
-    Route::get('/notifications/view/all', 'NotificationsController@getAllNotifications');
+    Route::group(['prefix' => 'notifications'], function () {
+        Route::get('/{id}', 'NotificationsController@getNotification');
+        Route::get('view/all', 'NotificationsController@getAllNotifications');
+    });
 });
